@@ -173,6 +173,9 @@ VITE_BACKEND_API_URL=${VITE_BACKEND_API_URL-backendurl}
 ---
 
 
+## New contributor guide
+- See `docs/newcomer_codebase_guide.md` for a codebase map, key functions, and maintenance workflow.
+
 ## Usage
 1. Connect to Neo4j Aura Instance which can be both AURA DS or AURA DB by passing URI and password through Backend env, fill using login dialog or drag and drop the Neo4j credentials file.
 2. To differntiate we have added different icons. For AURA DB we have a database icon and for AURA DS we have scientific molecule icon right under Neo4j Connection details label.
