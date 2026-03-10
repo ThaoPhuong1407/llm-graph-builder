@@ -81,3 +81,11 @@ NEO4J_PASSWORD=<your-password>
 ```bash
 uvicorn score:app --reload
 ```
+
+## 6. Use the front-end
+
+Once backend and Neo4j DB are running, open the frontend localhost URL in your browser.
+
+1. Click `Connect to Neo4j`.
+2. Upload PDF/text files, then start graph generation.
+3. Select the correct LLM model from the bottom dropdown before chatting or creating graphs.
