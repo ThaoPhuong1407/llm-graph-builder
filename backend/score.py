@@ -94,14 +94,8 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-is_gemini_enabled = os.environ.get("GEMINI_ENABLED", "False").lower() in ("true", "1", "yes")
-if is_gemini_enabled:
-    add_routes(app,ChatVertexAI(), path="/vertexai")
-
 app.add_api_route("/health", health([healthy_condition, healthy]))
-
 app.add_middleware(SessionMiddleware, secret_key=os.urandom(24))
-
 
 @app.post("/url/scan")
 async def create_source_knowledge_graph_url(
@@ -358,6 +352,12 @@ async def chat_bot(uri=Form(),model=Form(None),userName=Form(), password=Form(),
         total_call_time = time.time() - qa_rag_start_time
         logging.info(f"Total Response time is  {total_call_time:.2f} seconds")
         result["info"]["response_time"] = round(total_call_time, 2)
+        logging.info(
+            "chat_bot response summary: mode=%s message_length=%s info_keys=%s",
+            mode,
+            len(str(result.get("message", ""))),
+            list(result.get("info", {}).keys()),
+        )
         
         json_obj = {'api_name':'chat_bot','db_url':uri,'session_id':session_id,'mode':mode, 'logging_time': formatted_time(datetime.now(timezone.utc)), 'elapsed_api_time':f'{total_call_time:.2f}'}
         logger.log_struct(json_obj, "INFO")

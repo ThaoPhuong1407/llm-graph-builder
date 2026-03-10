@@ -224,6 +224,12 @@ def process_documents(docs, question, messages, llm, model,chat_mode_settings):
     
     try:
         formatted_docs, sources, entitydetails, communities = format_documents(docs, model)
+        logging.info(
+            "Preparing RAG response with %s docs for mode=%s and question=%r",
+            len(docs),
+            chat_mode_settings["mode"],
+            question[:200],
+        )
         
         rag_chain = get_rag_chain(llm=llm)
         
@@ -232,6 +238,7 @@ def process_documents(docs, question, messages, llm, model,chat_mode_settings):
             "context": formatted_docs,
             "input": question
         })
+        logging.info("RAG chain returned response object type=%s", type(ai_response).__name__)
 
         result = {'sources': list(), 'nodedetails': dict(), 'entities': dict()}
         node_details = {"chunkdetails":list(),"entitydetails":list(),"communitydetails":list()}
@@ -251,7 +258,24 @@ def process_documents(docs, question, messages, llm, model,chat_mode_settings):
         result["nodedetails"] = node_details
         result["entities"] = entities
 
-        content = ai_response.content
+        content = getattr(ai_response, "content", "")
+        if isinstance(content, list):
+            content = "".join(str(part) for part in content)
+        elif content is None:
+            content = ""
+        else:
+            content = str(content)
+
+        logging.info(
+            "Generated chat content length=%s preview=%r",
+            len(content),
+            content[:300],
+        )
+
+        if not content.strip():
+            logging.warning("LLM returned an empty chat response after successful retrieval.")
+            content = "The model returned an empty response."
+
         total_tokens = get_total_tokens(ai_response, llm)
         
         predict_time = time.time() - start_time

@@ -1,3 +1,0 @@
-execution_date,disconnected_nodes,delete_disconected_nodes,test_populate_graph_schema_from_text
-,,,"['Company', 'Person']"
-,,,"['FOUNDED_BY', 'STARTED_AS', 'EXPANDED_TO', 'REFERRED']"

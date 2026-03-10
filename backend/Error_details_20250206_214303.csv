@@ -1,2 +1,0 @@
-Model,Error,execution_date
-openai_gpt_3_5,local variable 'model_version' referenced before assignment,2025-02-06
